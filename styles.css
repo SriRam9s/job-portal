@@ -1,0 +1,77 @@
+body {
+  font-family: 'Segoe UI', sans-serif;
+  margin: 0;
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  color: #333;
+}
+
+/* Header */
+header {
+  background: #1e1e2f;
+  color: white;
+  padding: 20px;
+  text-align: center;
+  font-size: 24px;
+  letter-spacing: 1px;
+}
+
+/* Main container */
+.container {
+  background: white;
+  max-width: 700px;
+  margin: 40px auto;
+  padding: 30px;
+  border-radius: 12px;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+}
+
+/* Headings */
+h2, h3 {
+  margin-top: 20px;
+  color: #444;
+}
+
+/* Inputs */
+input, textarea {
+  width: 100%;
+  padding: 12px;
+  margin: 10px 0;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  font-size: 14px;
+}
+
+/* Buttons */
+button {
+  background: #667eea;
+  color: white;
+  border: none;
+  padding: 12px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: 0.3s;
+  margin-right: 10px;
+}
+
+button:hover {
+  background: #5a67d8;
+}
+
+/* Job Cards */
+.job {
+  background: #f9f9f9;
+  padding: 15px;
+  margin: 15px 0;
+  border-radius: 10px;
+  border-left: 5px solid #667eea;
+  transition: 0.3s;
+}
+
+.job:hover {
+  transform: scale(1.02);
+}
+
+/* Hidden */
+.hidden {
+  display: none;
+}
