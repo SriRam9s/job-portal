@@ -1,74 +1,90 @@
-let users = JSON.parse(localStorage.getItem("users")) || [];
-let jobs = JSON.parse(localStorage.getItem("jobs")) || [];
+const API = "https://job-portal-backend-aou8.onrender.com"; // replace if needed
+
 let currentUser = null;
 
-function signup() {
+// Signup
+async function signup() {
   const username = document.getElementById("username").value;
   const password = document.getElementById("password").value;
 
-  users.push({ username, password });
-  localStorage.setItem("users", JSON.stringify(users));
+  await fetch(`${API}/signup`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({ username, password })
+  });
+
   alert("Signup successful!");
 }
 
-function login() {
+// Login
+async function login() {
   const username = document.getElementById("username").value;
   const password = document.getElementById("password").value;
 
-  const user = users.find(u => u.username === username && u.password === password);
+  const res = await fetch(`${API}/login`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({ username, password })
+  });
 
-  if (user) {
+  if (res.ok) {
     currentUser = username;
     document.getElementById("auth").classList.add("hidden");
     document.getElementById("app").classList.remove("hidden");
     document.getElementById("userDisplay").innerText = username;
-    displayJobs(jobs);
+    loadJobs();
   } else {
-    alert("Invalid credentials");
+    alert("Invalid login");
   }
 }
 
-function postJob() {
+// Post Job
+async function postJob() {
   const title = document.getElementById("jobTitle").value;
   const desc = document.getElementById("jobDesc").value;
 
-  const job = { title, desc, applicants: [] };
-  jobs.push(job);
-  localStorage.setItem("jobs", JSON.stringify(jobs));
+  await fetch(`${API}/jobs`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({ title, desc })
+  });
 
-  displayJobs(jobs);
+  loadJobs();
 }
 
-function displayJobs(jobList) {
+// Load Jobs
+async function loadJobs() {
+  const res = await fetch(`${API}/jobs`);
+  const jobs = await res.json();
+
   const jobsDiv = document.getElementById("jobs");
   jobsDiv.innerHTML = "";
 
-  jobList.forEach((job, index) => {
+  jobs.forEach(job => {
     const div = document.createElement("div");
     div.className = "job";
 
     div.innerHTML = `
       <h4>${job.title}</h4>
       <p>${job.desc}</p>
-      <button onclick="applyJob(${index})">Apply</button>
+      <button onclick="applyJob('${job._id}')">Apply</button>
     `;
 
     jobsDiv.appendChild(div);
   });
 }
 
-function searchJobs() {
-  const query = document.getElementById("search").value.toLowerCase();
+// Apply Job
+async function applyJob(id) {
+  await fetch(`${API}/apply/${id}`, {
+    method: "POST"
+  });
 
-  const filtered = jobs.filter(job => job.title.toLowerCase().includes(query));
-  displayJobs(filtered);
-}
-
-function applyJob(index) {
-  if (!currentUser) return;
-
-  jobs[index].applicants.push(currentUser);
-  localStorage.setItem("jobs", JSON.stringify(jobs));
-
-  alert("Applied successfully!");
+  alert("Applied!");
 }
